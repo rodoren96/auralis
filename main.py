@@ -30,6 +30,5 @@ if prompt := st.chat_input(placeholder="Escribe algo para que te recomiende una 
     
     with st.chat_message("assistant"):
         stream = client.chat.completions.create(model=model,messages=conversation, stream=True)
-        response
-    )
+        response = st.write_stream(stream)
  
