@@ -11,3 +11,4 @@ if prompt:
     st.write("Auralis: Generating music...")
     st.write("Auralis: Here is the music for your prompt.")
     st.write("Auralis: Enjoy!")
+ 
