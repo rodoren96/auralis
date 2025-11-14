@@ -11,8 +11,8 @@ client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 model = "gpt-5-mini"
 
-st.title("Auralis")
-st.write("Welcome to Auralis, the AI-powered music recommendation system.")
+st.title("🎵🎶Auralis🎵🎶")
+st.write("🎵🎶Bienvenido a Auralis, tu recomendador de música.🎵🎶")
 
 if "messages" not in st.session_state:
     st.session_state.messages = [{'role': 'assistant', 'content': "Hello! I'm Auralis, your AI-powered music recommendation system. How can I help you today?"}]
