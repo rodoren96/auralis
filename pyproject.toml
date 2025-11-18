@@ -10,5 +10,7 @@ dependencies = [
     "python-dotenv>=1.2.1",
     "pyvis>=0.3.2",
     "scikit-learn>=1.7.2",
+    "setuptools>=80.9.0",
     "streamlit>=1.51.0",
+    "wordcloud>=1.9.4",
 ]
