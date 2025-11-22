@@ -21,6 +21,7 @@ from pyvis.network import Network
 from openai import OpenAI
 from typing import List, Optional
 from pydantic import BaseModel, Field
+from io import BytesIO
 # Funciones adicionales
 from functions import *
 
@@ -35,13 +36,23 @@ st.set_page_config(
     layout="wide"
 )
 # Load Data
-@st.cache_data
-def load_data_artist_level():
-    df = pd.read_parquet("data_model/Auralis_MusicRecommender3.parquet")
+@st.cache_resource
+def load_big_parquet():
+    HF_TOKEN = os.getenv("HF_DATA_MODEL_TOKEN")
+
+    url = "https://huggingface.co/datasets/rodoren96/auralis_model/resolve/main/Auralis_MusicRecommender4.parquet"
+    headers = {"Authorization": f"Bearer {HF_TOKEN}"}
+
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+
+    buffer = BytesIO(response.content)
+    df = pd.read_parquet(buffer)
+
     return df
 
 
-df_perfil = load_data_artist_level()
+df_perfil = load_big_parquet()
 
 
 st.title("🎵🎶 Auralis 🎵🎶")
@@ -58,7 +69,6 @@ with st.form("survey_form"):
 
 if submitted:
     if nombre_artista:
-        st.success(f"Procesando información del artista: {nombre_artista} ...")
         # Get Spotify Access Token
         auth_url = "https://accounts.spotify.com/api/token"
         auth_response = requests.post(auth_url, {
@@ -77,6 +87,7 @@ if submitted:
         artist_data = search_response.json()["artists"]["items"][0]
         artist_name = artist_data.get("name")
 
+        st.success(f"Obteniendo resultados para {artist_name} ...")
         # Search Artist - Cluster Model
         artist_filter = df_perfil[df_perfil['Grupos K-Means'] == df_perfil[df_perfil['main_artist'] == artist_name]["Grupos K-Means"].iloc[0]]
 
@@ -111,7 +122,7 @@ if submitted:
         artist_similarity = artist_similarity.sort_values(by="Similitud por Features", ascending=False)
         artist_similarity.reset_index(inplace=True, drop=True)
         
-        artist_similarity = artist_similarity[artist_similarity["Similitud por Features"]>=0.4]
+        artist_similarity = artist_similarity[artist_similarity["Similitud por Features"]>=0.5].head(6)
         with st.spinner("Procesando datos...", show_time=True):
         ################################# API Spotify #################################
             unique_artists = artist_similarity['main_artist'].unique().tolist()

@@ -45,7 +45,7 @@ client_google = OpenAI(api_key=GOOGLE_API_KEY, base_url=GEMINI_BASE_URL)
 client_deepseek = OpenAI(api_key=DEEPSEEK_API_KEY, base_url=DEEPSEEK_BASE_URL)
 # AI Models
 ## OpenAI
-model_openai = "gpt-5-mini"
+model_openai = "gpt-5.1"
 ## Llama
 model_groq = "llama-3.3-70b-versatile"
 ## Llama
@@ -67,7 +67,7 @@ class EarningsCallInsights(BaseModel):
     emotional_palette: List[str] = Field(default_factory=list,description="Lista de emociones presentes: nostalgia, anhelo, vulnerabilidad, esperanza, enojo, euforia, etc.")
     relationship_context: Optional[str] = Field(description="Contexto emocional de una relación: ruptura, amor correspondido, amor no correspondido, duelo, deseo, nostalgia")
 
-def get_earnings_call_insights(client, call_songs: str, model_name: str = "gpt-5-mini") -> EarningsCallInsights:
+def get_earnings_call_insights(client, call_songs: str, model_name: str = "gpt-5.1") -> EarningsCallInsights:
     """
     Obtiene insights clave de una transcripción de earnings call utilizando un modelo de OpenAI.
 
@@ -106,7 +106,7 @@ def show_gpt_fun_facts_spinner(artist: str, duration_minutes: int = 5):
     duration_seconds = duration_minutes*60
     start_time = time.time()
 
-    with st.spinner(f"Obteniendo insights para las lyrics de {artist}…"):
+    with st.spinner(f"Sabías esto de {artist}…"):
         placeholder = st.empty()
 
         while time.time() - start_time < duration_seconds:
