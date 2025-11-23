@@ -88,8 +88,21 @@ if submitted:
         artist_name = artist_data.get("name")
 
         st.success(f"Obteniendo resultados para {artist_name} ...")
-        # Search Artist - Cluster Model
-        artist_filter = df_perfil[df_perfil['Grupos K-Means'] == df_perfil[df_perfil['main_artist'] == artist_name]["Grupos K-Means"].iloc[0]]
+        
+        try:
+            # Search Artist - Cluster Model
+            artist_cluster = df_perfil.loc[df_perfil['main_artist'] == artist_name, "Grupos K-Means"].iloc[0]
+
+            # Filtrar artistas del mismo cluster
+            artist_filter = df_perfil[df_perfil["Grupos K-Means"] == artist_cluster]
+
+        except IndexError:
+            st.error(f"No se encontró información sobre **{artist_name}** dentro del modelo, intenta con otro.")
+            st.stop()  
+
+        except Exception as e:
+            st.error(f"Ocurrió un error inesperado al buscar al artista: {e}")
+            st.stop()
 
         ################################# Similar Artist #################################
         feature_cols = [
