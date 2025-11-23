@@ -87,8 +87,6 @@ if submitted:
         artist_data = search_response.json()["artists"]["items"][0]
         artist_name = artist_data.get("name")
 
-        st.success(f"Obteniendo resultados para {artist_name} ...")
-        
         try:
             # Search Artist - Cluster Model
             artist_cluster = df_perfil.loc[df_perfil['main_artist'] == artist_name, "Grupos K-Means"].iloc[0]
@@ -103,6 +101,8 @@ if submitted:
         except Exception as e:
             st.error(f"Ocurrió un error inesperado al buscar al artista: {e}")
             st.stop()
+
+        st.success(f"Obteniendo resultados para **{artist_name}** ...")
 
         ################################# Similar Artist #################################
         feature_cols = [
@@ -135,7 +135,7 @@ if submitted:
         artist_similarity = artist_similarity.sort_values(by="Similitud por Features", ascending=False)
         artist_similarity.reset_index(inplace=True, drop=True)
         
-        artist_similarity = artist_similarity[artist_similarity["Similitud por Features"]>=0.3].head(6)
+        artist_similarity = artist_similarity[artist_similarity["Similitud por Features"]>=0.5].head(6)
         with st.spinner("Procesando datos...", show_time=True):
         ################################# API Spotify #################################
             unique_artists = artist_similarity['main_artist'].unique().tolist()

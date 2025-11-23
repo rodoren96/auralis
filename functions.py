@@ -106,7 +106,7 @@ def show_gpt_fun_facts_spinner(artist: str, duration_minutes: int = 5):
     duration_seconds = duration_minutes*60
     start_time = time.time()
 
-    with st.spinner(f"Sabías esto de {artist}…"):
+    with st.spinner(f"¿Sabías esto de **{artist}**…?"):
         placeholder = st.empty()
 
         while time.time() - start_time < duration_seconds:
