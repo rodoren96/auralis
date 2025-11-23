@@ -122,7 +122,7 @@ if submitted:
         artist_similarity = artist_similarity.sort_values(by="Similitud por Features", ascending=False)
         artist_similarity.reset_index(inplace=True, drop=True)
         
-        artist_similarity = artist_similarity[artist_similarity["Similitud por Features"]>=0.5].head(6)
+        artist_similarity = artist_similarity[artist_similarity["Similitud por Features"]>=0.3].head(6)
         with st.spinner("Procesando datos...", show_time=True):
         ################################# API Spotify #################################
             unique_artists = artist_similarity['main_artist'].unique().tolist()
