@@ -30,17 +30,25 @@ load_dotenv(override=True)
 ## Spotify
 Spotify_API_CLIENT_KEY = os.getenv("Spotify_API_CLIENT_KEY")
 Spotify_API_CLIENT_SECRET_KEY = os.getenv("Spotify_API_CLIENT_SECRET_KEY")
+
 # Configuracion Streamlit
+
+img = Image.open("Auralis_logo_v2.png")
+
 st.set_page_config(
     page_title="Auralis - Music Recommender",
+    page_icon=img,
     layout="wide"
 )
+
+st.sidebar.image(img, caption="Sugerencias personalizadas: Encuentra tu próxima artista favorito.")
+
 # Load Data
 @st.cache_resource
 def load_big_parquet():
     HF_TOKEN = os.getenv("HF_DATA_MODEL_TOKEN")
 
-    url = "https://huggingface.co/datasets/rodoren96/auralis_model/resolve/main/Auralis_MusicRecommender4.parquet"
+    url = "https://huggingface.co/datasets/rodoren96/auralis_model/resolve/main/Auralis_MusicRecommenderv5.parquet"
     headers = {"Authorization": f"Bearer {HF_TOKEN}"}
 
     response = requests.get(url, headers=headers)
@@ -55,8 +63,8 @@ def load_big_parquet():
 df_perfil = load_big_parquet()
 
 
-st.title("🎵🎶 Auralis 🎵🎶")
-st.write("🎧 Bienvenido a **Auralis**, tu recomendador de música.")
+st.title("🎵 Auralis 🎵")
+st.write("🎧 Bienvenido a **Auralis**, tu recomendador de música inteligente.")
 
 with st.form("survey_form"):
     # st.write("Por favor, responda las siguientes preguntas:")
@@ -284,7 +292,7 @@ if submitted:
             st.components.v1.html(html_content, height=500, scrolling=False)
         with st.status("Analizando letras y generando insights...", expanded=True) as status:
             ################################# Structured Outputs para Lyrics #################################
-            show_gpt_fun_facts_spinner(artist_target, duration_minutes=10)
+            show_gpt_fun_facts_spinner(artist_target, duration_minutes=1)
             st.write("Obteniendo resultados...")
             insights_list = []
             for lyric in artist_filter["lyrics"]:

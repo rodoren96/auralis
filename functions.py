@@ -60,7 +60,7 @@ class EarningsCallInsights(BaseModel):
     Output estructurado con insights clave en español extraídos de una earnings call.
     """
     sentiment: Optional[str] = Field(description="Sentimiento general dominante: miedo, tristeza, ira, alegría, amor, neutral")
-    key_topics: List[str] = Field(default_factory=list, description="Temas principales de la canción, cada uno con máximo 4 palabras")
+    key_topics: List[str] = Field(default_factory=list, description="Temas principales de la canción, cada uno con máximo 2 palabras")
     summary: Optional[str] = Field(description="Resumen en máximo 2 oraciones sobre el contenido de la letra")
     explicit_themes: List[str] = Field(default_factory=list,description="Temas explícitos o sensibles presentes, como drogas, violencia, sexualidad, etc.")
     lyrical_complexity: Optional[str] = Field(description="Complejidad lírica: simple, moderada, compleja")
@@ -91,7 +91,7 @@ def get_earnings_call_insights(client, call_songs: str, model_name: str = "gpt-5
     return insights.model_dump()
 ################################# Spinner con Fun Facts #################################
 def get_fun_fact_from_gpt(artist: str) -> str:
-    prompt = f"Dame un dato curioso, interesante y poco conocido sobre el artista de música {artist}. Solo uno, máximo 5 líneas. Que ningún dato curioso se repita."
+    prompt = f"Dame un dato curioso, interesante y poco conocido sobre el artista de música {artist}. Solo uno, máximo 4 líneas. Que ningún dato curioso se repita."
     
     response = client_deepseek.chat.completions.create(
         model=model_deepseek,
@@ -195,7 +195,7 @@ def generate_storytelling(row):
     Key topics: {row.key_topics}
 
     Genera un análisis narrativo de máximo 4 frases sobre el estilo emocional,
-    lírico y temático del artista. Escríbelo en tono artistico.
+    lírico y temático del artista. Escríbelo en tono artistico. Usa un máximo de 4 líneas.
     """
 
     resp = client_groq.chat.completions.create(
